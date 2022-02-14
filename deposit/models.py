@@ -77,7 +77,7 @@ class License(models.Model):
     diversion = models.CharField(db_column='Diversion', max_length=30, verbose_name='Статус отвода')
 
     def __str__(self):
-        return f'{self.name} - {self.id_enterprise}'
+        return f'{self.name}'
 
     class Meta:
         managed = False
@@ -95,9 +95,6 @@ class Municipality(models.Model):
                                              verbose_name='Тип населенного пункта')
     direction = models.CharField(db_column='Direction', max_length=20, verbose_name='Направление к месторождению')
     distance = models.FloatField(db_column='Distance', verbose_name='Расстояние до месторождения')
-
-    def __str__(self):
-        return f'{self.name} - {self.id_deposit}'
 
     class Meta:
         managed = False
