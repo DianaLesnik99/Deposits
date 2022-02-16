@@ -1,0 +1,49 @@
+body {
+    min-width: 320px;
+}
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    color: #111;
+}
+
+a:hover {
+    color: #555;
+}
+/* Header */
+.navbar-light .navbar-nav .nav-link {
+    color: #111;
+}
+
+.top-menu li a::after {
+    content: '';
+    display: block;
+    width: 100%;
+    background-color: #111;
+    height: 1px;
+    transition: all .3s;
+    transform: scale(0);
+}
+
+.top-menu li a:hover:after {
+    transform: scale(1);
+}
+/* Header */
+
+/* Carousel */
+.myCarousel {
+    padding: 0;
+}
+
+.myCarousel .carousel-item {
+    display: flex;
+    max-height: 700px;
+}
+
+.myCarousel .carousel-item img {
+    object-fit: cover;
+}
+/* Carousel */

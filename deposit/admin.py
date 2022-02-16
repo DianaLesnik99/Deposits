@@ -26,7 +26,7 @@ class EnterpriseAdmin(admin.ModelAdmin):
 
 class LicenseAdmin(admin.ModelAdmin):
     model = License
-    list_display = ['name', 'id_enterprise', 'start_date', 'end_date']
+    list_display = ['name', 'get_deposit', 'id_enterprise', 'start_date', 'end_date']
     search_fields = ('name', 'id_enterprise__name',)
     ordering = ('id',)
     list_filter = ('cancelled', 'start_date', 'end_date')

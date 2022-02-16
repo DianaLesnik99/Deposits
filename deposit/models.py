@@ -19,7 +19,7 @@ class Deposit(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', max_length=200, verbose_name='Наименование')
     id_license = models.ForeignKey('License', models.DO_NOTHING, db_column='IDLicense',
-                                   verbose_name='Государственный регистрационный номер')
+                                   verbose_name='Государственный регистрационный номер', related_name='license')
     id_area = models.ForeignKey(Area, models.DO_NOTHING, db_column='IDArea', verbose_name='Район')
     NOT_MASTERED = 'Не освоен'
     POORLY_MASTERED = 'Слабо освоен'
@@ -78,6 +78,12 @@ class License(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_deposit(self):
+        deposit = self.license.first()
+        return deposit.name if deposit else '-'
+
+    get_deposit.short_description = 'Месторождение'
 
     class Meta:
         managed = False
