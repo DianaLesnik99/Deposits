@@ -7,6 +7,7 @@
     <!-- Настройка viewport -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Золото Забайкалья</title>
+    <!-- CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/main.css' %}" type="text/css">
@@ -14,7 +15,7 @@
 <body>
 <!--Navigation-->
 <div class="main">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'base' %}">Золото Забайкалья</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -58,6 +59,7 @@
             </div>
         </div>
     </nav>
+    <div class="downbtn"></div>
     {% block content %}
         <div class="container-fluid main">
             <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
@@ -101,14 +103,21 @@
         </div>
     {% endblock content %}
 </div>
+<div class="upbtn"></div>
 <!--Footer-->
 <footer class="bg-dark" style="  flex-shrink: 0;">
     <div class="container"><p class="m-0 text-center text-white">...</p></div>
 </footer>
+<!--JS-->
 <script src="https://kit.fontawesome.com/9ed2d1fb88.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-<script src="{% static 'js/script.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
+<img src="{% static 'img/up.webp' %}" alt="Наверх" title="Наверх" class="GoTop">
+<img src="{% static 'img/down.webp' %}" alt="Вниз" title="Вниз" class="GoBottom">
 </body>
 </html>
