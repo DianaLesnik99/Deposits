@@ -46,7 +46,7 @@ class Deposit(models.Model):
         verbose_name_plural = 'Месторождения'
 
 
-class Enterprise(models.Model):
+class SubsoilUsers(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', max_length=100, verbose_name='Наименование')
     tin = models.CharField(db_column='TIN', unique=True, max_length=12, verbose_name='ИНН')
@@ -60,7 +60,7 @@ class Enterprise(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'enterprise'
+        db_table = 'subsoilusers'
         verbose_name = 'Недропользователь'
         verbose_name_plural = 'Недропользователи'
 
@@ -68,8 +68,8 @@ class Enterprise(models.Model):
 class License(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', max_length=15, verbose_name='Наименование')
-    id_enterprise = models.ForeignKey(Enterprise, models.DO_NOTHING, db_column='IDEnterprise',
-                                      verbose_name='Недропользователь')
+    id_subsoilusers = models.ForeignKey(SubsoilUsers, models.DO_NOTHING, db_column='IDSubsoilUsers',
+                                        verbose_name='Недропользователь')
     start_date = models.DateField(db_column='StartDate', verbose_name='Дата начала срока действия лицензии')
     end_date = models.DateField(db_column='EndDate', verbose_name='Дата окончания срока действия лицензии')
     cancelled = models.BooleanField(db_column='Cancelled', verbose_name='Действие лицензии прекращено')

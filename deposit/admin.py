@@ -17,8 +17,8 @@ class DepositAdmin(admin.ModelAdmin):
     list_filter = ('development',)
 
 
-class EnterpriseAdmin(admin.ModelAdmin):
-    model = Enterprise
+class SubsoilUsersAdmin(admin.ModelAdmin):
+    model = SubsoilUsers
     list_display = ['name', 'tin', 'director']
     search_fields = ('name', 'tin', 'director',)
     ordering = ('id',)
@@ -26,8 +26,8 @@ class EnterpriseAdmin(admin.ModelAdmin):
 
 class LicenseAdmin(admin.ModelAdmin):
     model = License
-    list_display = ['name', 'get_deposit', 'id_enterprise', 'start_date', 'end_date']
-    search_fields = ('name', 'id_enterprise__name',)
+    list_display = ['name', 'get_deposit', 'id_subsoilusers', 'start_date', 'end_date']
+    search_fields = ('name', 'id_subsoilusers__name',)
     ordering = ('id',)
     list_filter = ('cancelled', 'start_date', 'end_date')
 
@@ -47,7 +47,7 @@ class MunicipalityTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(Area, AreaAdmin)
 admin.site.register(Deposit, DepositAdmin)
-admin.site.register(Enterprise, EnterpriseAdmin)
+admin.site.register(SubsoilUsers, SubsoilUsersAdmin)
 admin.site.register(License, LicenseAdmin)
 admin.site.register(Municipality, MunicipalityAdmin)
 admin.site.register(MunicipalityType, MunicipalityTypeAdmin)

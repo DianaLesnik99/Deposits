@@ -13,6 +13,32 @@ section {
     padding: 50px 0;
 }
 
+@media (min-width: 768px) {
+    section {
+        padding: 50px 100px;
+    }
+}
+
+@media (min-width: 1050px) {
+    section {
+        padding: 50px 150px;
+    }
+}
+
+@media (min-width: 1500px) {
+    section {
+        padding: 50px 250px;
+    }
+}
+
+#id_subsoil_users {
+    width: 100%;
+}
+
+#id_subsoil_users option {
+    width: 100%;
+}
+
 a {
     color: #111;
 }
@@ -171,7 +197,6 @@ a:hover {
 /* Carousel */
 
 /* History Content */
-
 .heading {
     text-align: center;
 }
@@ -200,9 +225,9 @@ a:hover {
     color: #555;
 }
 
-.history-img {
-    max-width: 100%;
-    height: auto;
+.history-img img {
+  width: 100%;
+  height: auto;
 }
 
 .history-video {
