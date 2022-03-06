@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.urls import reverse
 
 class Area(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
@@ -58,8 +58,11 @@ class SubsoilUsers(models.Model):
     def __str__(self):
         return f'{self.name}'
 
+    def get_absolute_url(self):
+        return reverse('subsoil_user_detail', kwargs={'pk': self.id})
+
     class Meta:
-        managed = False
+        managed = True
         db_table = 'subsoilusers'
         verbose_name = 'Недропользователь'
         verbose_name_plural = 'Недропользователи'

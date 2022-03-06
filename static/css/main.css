@@ -13,32 +13,6 @@ section {
     padding: 50px 0;
 }
 
-@media (min-width: 768px) {
-    section {
-        padding: 50px 100px;
-    }
-}
-
-@media (min-width: 1050px) {
-    section {
-        padding: 50px 150px;
-    }
-}
-
-@media (min-width: 1500px) {
-    section {
-        padding: 50px 250px;
-    }
-}
-
-#id_subsoil_users {
-    width: 100%;
-}
-
-#id_subsoil_users option {
-    width: 100%;
-}
-
 a {
     color: #111;
 }
@@ -247,7 +221,48 @@ a:hover {
 
 /* History Content */
 
+/* Subsoil users Content */
+
+.list_sub_users {
+    list-style: circle;
+	margin: 0 0 0 45px;
+	padding: 15px 0 5px 0;
+    color: red;
+}
+
+.list_sub_users li {
+	position: relative;
+	margin: 0 0 0 0;
+	padding: 0 0 10px 0;
+	line-height: 1.4;
+}
+.list_sub_users li:before {
+
+}
+
+.list_sub_users li a {
+    text-decoration: none;
+}
+/* Subsoil users Content */
+
+/* Subsoil users detail Content */
+
+/* Subsoil users detail Content */
+
+/* Paginator */
+
+.pagination {
+    justify-content: center;
+}
+
+.pagination a {
+    text-decoration: none;
+}
+
+/* Paginator */
+
 /* Footer */
+
 footer {
     /* Чтобы footer не уменьшался */
     flex-shrink: 0;

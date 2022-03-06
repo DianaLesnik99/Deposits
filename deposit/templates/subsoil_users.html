@@ -1,47 +1,51 @@
 {% extends 'base.html' %}
-{% load static %}
-{% load crispy_forms_tags %}
 {% block title %}Недропользователи{% endblock title %}
 {% block content %}
     <section class="subsoilusers-section">
         <div class="container">
-            <h1 class="heading">Недропользователи и лицензии</h1>
-            <div class="row" style="margin-bottom: 50px; margin-top: 50px; justify-content: center">
+            <h1 class="heading">Недропользователи</h1>
+            <div class="row" style="margin-top: 50px; justify-content: center">
                 <div class="col-md-8">
-                    <form class="d-grid gap-2" action="" method="GET">
-                        {% csrf_token %}
-                        {% crispy form %}
-                    </form>
-                    <table class="table table-hover caption-top">
-                        <caption>Информация о недропользователе</caption>
-                        <thead>
-                        <tr>
-                            <th scope="col"></th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <p>На данной странице представлен список действующих недропользователей. Для более подробной
+                        информации нажмите на интересующего Вас недропользователя.</p>
+                    <ol class="list_sub_users">
+                        {% for subsoil_users in page_obj %}
+                            <li><a href="{{ subsoil_users.get_absolute_url }}">{{ subsoil_users.name }}</a></li>
+                        {% endfor %}
+                    </ol>
+                    {% if page_obj.has_other_pages %}
+                        <nav class="list-pages">
+                            <ul class="pagination justify-content-center">
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page=1">&laquo;</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link"
+                                           href="?page={{ page_obj.previous_page_number }}">&lsaquo;</a>
+                                    </li>
+                                {% endif %}
+                                {% for p in paginator.page_range %}
+                                    {% if page_obj.number == p %}
+                                        <li class="page-item active" aria-current="page">
+                                            <a class="page-link" href="#">{{ p }}</a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
+                                    </li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                            &raquo;</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
                 </div>
             </div>
         </div>
