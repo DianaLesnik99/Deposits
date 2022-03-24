@@ -1,13 +1,13 @@
 {% extends 'base.html' %}
 {% block title %}Информация о недропользователе{% endblock title %}
 {% block content %}
-    <section class="subsoilusersdetail-section">
+    <section class="subsoil_users_detail-section">
         <div class="container">
             <h1 class="heading">Информация о недропользователе {{ subsoil_user.name }}</h1>
             <div class="row" style="margin-top: 50px; justify-content: center">
                 <div class="col-md-8">
                     <p>В данной таблице представлены основные данные по недропользователю</p>
-                    <table class="table table-hover caption-top">
+                    <table class="table caption-top">
                         <caption>Информация о недропользователе</caption>
                         <tbody>
                         <tr>
@@ -40,7 +40,7 @@
                     {% for d in deposit %}
                         <details>
                             <summary>Информация о лицензии {{ d.id_license.name }} ({{ d.name }})</summary>
-                            <table class="table table-hover table-bordered">
+                            <table class="table table-bordered">
                                 <tbody>
                                 <tr>
                                     <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Лицензия</th>

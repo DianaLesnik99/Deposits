@@ -10,6 +10,8 @@ urlpatterns = [
     path('map/', MapView.as_view(), name='map'),
     path('subsoil_users/', SubsoilUsersView.as_view(), name='subsoil_users'),
     path('subsoil_users_detail/<int:pk>/', SubsoilUserDetailView.as_view(), name='subsoil_user_detail'),
+    path('localities/', LocalitiesView.as_view(), name='localities'),
+    path('locality_detail/<int:pk>/', LocalityDetailView.as_view(), name='locality_detail'),
     path('test/', TestView.as_view(), name='test'),
     path('logout/', LogoutView.as_view(next_page='/'), name='logout'),
 ]

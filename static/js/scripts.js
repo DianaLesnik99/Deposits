@@ -3,7 +3,7 @@ jQuery(function () {
     $(".GoTop").hide();
     if ($(window).scrollTop() >= 250) $(".GoTop").fadeIn("slow")
     $(window).scroll(function () {
-        if ($(window).scrollTop() <= 250) $(".GoTop").fadeOut("slow")
+        if ($(window).scrollTop() <= 550) $(".GoTop").fadeOut("slow")
         else $(".GoTop").fadeIn("slow")
     });
 
@@ -23,3 +23,11 @@ jQuery(function () {
     })
 });
 /*Down and Up Buttons*/
+
+/*Print document*/
+const button = document.querySelector('.print')
+function handleClick() {
+  window.print();
+}
+button.addEventListener('click', handleClick)
+/*Print document*/

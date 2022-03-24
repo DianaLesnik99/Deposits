@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 
+
 class Area(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', unique=True, max_length=100, verbose_name='Наименование')
@@ -63,7 +64,7 @@ class SubsoilUsers(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'subsoilusers'
+        db_table = 'subsoil_user'
         verbose_name = 'Недропользователь'
         verbose_name_plural = 'Недропользователи'
 
@@ -71,8 +72,8 @@ class SubsoilUsers(models.Model):
 class License(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', max_length=15, verbose_name='Наименование')
-    id_subsoilusers = models.ForeignKey(SubsoilUsers, models.DO_NOTHING, db_column='IDSubsoilUsers',
-                                        verbose_name='Недропользователь')
+    id_subsoil_users = models.ForeignKey(SubsoilUsers, models.DO_NOTHING, db_column='IDSubsoilUsers',
+                                         verbose_name='Недропользователь')
     start_date = models.DateField(db_column='StartDate', verbose_name='Дата начала срока действия лицензии')
     end_date = models.DateField(db_column='EndDate', verbose_name='Дата окончания срока действия лицензии')
     cancelled = models.BooleanField(db_column='Cancelled', verbose_name='Действие лицензии прекращено')
@@ -95,24 +96,28 @@ class License(models.Model):
         verbose_name_plural = 'Лицензии'
 
 
-class Municipality(models.Model):
+class Localities(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', max_length=100, verbose_name='Наименование')
-    id_deposit = models.ForeignKey(Deposit, models.DO_NOTHING, db_column='IDDeposit', verbose_name='Месторождение')
-    id_area = models.ForeignKey(Area, models.DO_NOTHING, db_column='IDArea', verbose_name='Район')
-    id_municipality_type = models.ForeignKey('MunicipalityType', models.DO_NOTHING, db_column='IDMunicipalityType',
-                                             verbose_name='Тип населенного пункта')
-    direction = models.CharField(db_column='Direction', max_length=20, verbose_name='Направление к месторождению')
-    distance = models.FloatField(db_column='Distance', verbose_name='Расстояние до месторождения')
+    id_area = models.ForeignKey(Area, models.DO_NOTHING, db_column='IDArea', verbose_name='Район',
+                                related_name='localities')
+    id_locality_type = models.ForeignKey('LocalitiesType', models.DO_NOTHING, db_column='IDLocalityType',
+                                         verbose_name='Тип')
+
+    def __str__(self):
+        return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse('locality_detail', kwargs={'pk': self.id})
 
     class Meta:
         managed = False
-        db_table = 'municipality'
+        db_table = 'locality'
         verbose_name = 'Населенный пункт'
         verbose_name_plural = 'Населенные пункты'
 
 
-class MunicipalityType(models.Model):
+class LocalitiesType(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', unique=True, max_length=100, verbose_name='Наименование')
 
@@ -121,6 +126,24 @@ class MunicipalityType(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'municipalitytype'
+        db_table = 'locality_type'
         verbose_name = 'Тип населенных пунктов'
         verbose_name_plural = 'Типы населенных пунктов'
+
+
+class LocalitiesDeposit(models.Model):
+    id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
+    id_locality = models.ForeignKey(Localities, models.DO_NOTHING,
+                                    db_column='IDLocality', verbose_name='Населенный пункт')
+    id_deposit = models.ForeignKey(Deposit, models.DO_NOTHING, db_column='IDDeposit', verbose_name='Месторождение')
+    direction = models.CharField(db_column='Direction', max_length=20, verbose_name='Направление')
+    distance = models.FloatField(db_column='Distance', verbose_name='Расстояние')
+
+    def __str__(self):
+        return f'{self.id_locality} - {self.id_deposit}'
+
+    class Meta:
+        managed = False
+        db_table = 'locality_deposit'
+        verbose_name = 'Связь месторождений с населенными пунктами'
+        verbose_name_plural = 'Связи месторождений с населенными пунктами'

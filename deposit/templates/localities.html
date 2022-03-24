@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Населенные пункты{% endblock title %}
+{% block content %}
+    <section class="municipality-section">
+        <div class="container">
+            <h1 class="heading">Населенные пункты</h1>
+            <div class="row" style="margin-top: 50px; justify-content: center">
+                <div class="col-md-8">
+                    <p>На данной странице представлен список населенных пунктов Забайкальского края по районам. Для
+                        более подробной информации нажмите на интересующий Вас район и выберите населенный пункт.</p>
+                    <ul>
+                        {% for a in object_list %}
+                            <details>
+                                <summary>{{ a.name }}</summary>
+                                <ol class="list_sub_users">
+                                    {% for l in a.localities.all|dictsort:"name" %}
+                                        <li><a href="{{ l.get_absolute_url }}">{{ l.name }}</a></li>
+                                    {% endfor %}
+                                </ol>
+                            </details>
+                            <hr/>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

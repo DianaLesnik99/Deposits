@@ -70,7 +70,7 @@ a:hover {
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    height: 100vh;
+    height: 94vh;
 }
 
 @media (max-width: 991px) {
@@ -101,6 +101,11 @@ a:hover {
 
 .carousel-fade .carousel-inner .active {
     opacity: 1;
+}
+
+.carousel-caption {
+    top: 35%;
+    bottom: auto;
 }
 
 .title {
@@ -200,8 +205,8 @@ a:hover {
 }
 
 .history-img img {
-  width: 100%;
-  height: auto;
+    width: 100%;
+    height: auto;
 }
 
 .history-video {
@@ -225,17 +230,18 @@ a:hover {
 
 .list_sub_users {
     list-style: circle;
-	margin: 0 0 0 45px;
-	padding: 15px 0 5px 0;
+    margin: 0 0 0 45px;
+    padding: 15px 0 5px 0;
     color: red;
 }
 
 .list_sub_users li {
-	position: relative;
-	margin: 0 0 0 0;
-	padding: 0 0 10px 0;
-	line-height: 1.4;
+    position: relative;
+    margin: 0 0 0 0;
+    padding: 0 0 10px 0;
+    line-height: 1.4;
 }
+
 .list_sub_users li:before {
 
 }
@@ -243,11 +249,34 @@ a:hover {
 .list_sub_users li a {
     text-decoration: none;
 }
+
 /* Subsoil users Content */
 
-/* Subsoil users detail Content */
+/* Municipality Content */
 
-/* Subsoil users detail Content */
+.list_municipality {
+    list-style: circle;
+    margin: 0 0 0 45px;
+    padding: 15px 0 5px 0;
+    color: red;
+}
+
+.list_municipality li {
+    position: relative;
+    margin: 0 0 0 0;
+    padding: 0 0 10px 0;
+    line-height: 1.4;
+}
+
+.list_municipality li:before {
+
+}
+
+.list_municipality li a {
+    text-decoration: none;
+}
+
+/* Municipality Content */
 
 /* Paginator */
 
@@ -269,3 +298,12 @@ footer {
 }
 
 /* Footer */
+@media print {
+    .navbar,
+    .details,
+    .btn-primary,
+    .GoTop,
+    .GoBottom {
+        display: none;
+    }
+}
