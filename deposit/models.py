@@ -5,6 +5,7 @@ from django.urls import reverse
 class Area(models.Model):
     id = models.AutoField(db_column='ID', primary_key=True, verbose_name='ID')
     name = models.CharField(db_column='Name', unique=True, max_length=100, verbose_name='Наименование')
+    official_portal = models.CharField(db_column='OfficialPortal', max_length=200)
 
     def __str__(self):
         return f'{self.name}'

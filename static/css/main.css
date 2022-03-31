@@ -226,6 +226,12 @@ a:hover {
 
 /* History Content */
 
+/* Map Content */
+#mapid {
+    height: 94vh;
+}
+/* Map Content */
+
 /* Subsoil users Content */
 
 .list_sub_users {
@@ -305,5 +311,14 @@ footer {
     .GoTop,
     .GoBottom {
         display: none;
+    }
+
+    .table-responsive {
+        overflow-x: visible;
+        font-size: 12px;
+    }
+
+    @page {
+        margin: 30px auto;
     }
 }

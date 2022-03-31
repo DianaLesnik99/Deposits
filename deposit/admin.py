@@ -5,6 +5,7 @@ from .models import *
 
 class AreaAdmin(admin.ModelAdmin):
     model = Area
+    list_display = ['name', 'official_portal']
     search_fields = ('name',)
     ordering = ('name',)
 

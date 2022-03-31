@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Информация о недропользователе{% endblock title %}
+{% block content %}
+    <section class="municipality_detail-section">
+        <div class="container">
+            <h1 class="heading">Информация о районе {{ area.name }}</h1>
+            <div class="row" style="margin-top: 50px; justify-content: center">
+                <div class="col-md-8">
+                    {% if area.official_portal != '' %}
+                        <a target="_blank" href="{{ area.official_portal }}" style="text-decoration: none;">Официальный
+                            портал Забайкальского края. {{ area.name }} район</a>
+                    {% else %}
+                        <p>В настоящий момент у данного района не официального портала.</p>
+                    {% endif %}
+                    {% if area.deposit_set.count == 0 %}
+                        <p class="mt-4">В данном районе нет разрабатывающихся месторождений.</p>
+                    {% else %}
+                        <p class="mt-4">В данной таблице представлена информация о месторождениях, которые
+                            разрабатываются в районе</p>
+                        <div class="table-responsive">
+                            <table class="table table-bordered caption-top">
+                                <caption>Информация о месторождения</caption>
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Месторождение</th>
+                                    <th scope="col">Недропользователь</th>
+                                    <th scope="col">Лицензия</th>
+                                    <th scope="col">Действие лицензии прекращено</th>
+                                    <th scope="col">Целевое назначение лицензии</th>
+                                    <th scope="col">Запасы месторождения (A+B+C1), кг</th>
+                                    <th scope="col">Запасы месторождения (C2), кг</th>
+                                    <th scope="col">Забалансовые запасы месторождения, кг</th>
+                                    <th scope="col">Суммарные запасы месторождения, кг</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for d in deposit %}
+                                    <tr>
+                                        <th scope="row">{{ forloop.counter }}</th>
+                                        <td>{{ d.name }}</td>
+                                        <td>{{ d.id_license.id_subsoil_users.name }}</td>
+                                        <td>{{ d.id_license.name }}</td>
+                                        <td>{{ d.id_license.cancelled|yesno:"Да, Нет" }}</td>
+                                        <td>{{ d.id_license.destination }}</td>
+                                        <td>{{ d.a_b_c1|default_if_none:"Отсутствуют" }}</td>
+                                        <td>{{ d.c2|default_if_none:"Отсутствуют" }}</td>
+                                        <td>{{ d.off_balance|default_if_none:"Отсутствуют" }}</td>
+                                        {% if d.a_b_c1 == None and d.c2 == None and d.off_balance == None %}
+                                            <td>Отсутствуют</td>
+                                        {% elif d.a_b_c1 == None and d.c2 == None %}
+                                            <td>{{ d.off_balance }}</td>
+                                        {% elif d.a_b_c1 == None and d.off_balance == None %}
+                                            <td>{{ d.c2 }}</td>
+                                        {% elif d.c2 == None and d.off_balance == None %}
+                                            <td>{{ d.a_b_c1 }}</td>
+                                        {% elif d.a_b_c1 == None %}
+                                            <td>{{ d.c2|add:d.off_balance }}</td>
+                                        {% elif d.c2 == None %}
+                                            <td>{{ d.a_b_c1|add:d.off_balance }}</td>
+                                        {% elif d.off_balance == None %}
+                                            <td>{{ d.a_b_c1|add:d.c2 }}</td>
+                                        {% else %}
+                                            <td>{{ d.a_b_c1|add:d.c2|add:d.off_balance }}</td>
+                                        {% endif %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="button" class="btn btn-primary print">Отчет PDF</button>
+                            <button href="#" type="button" class="btn btn-primary print">Отчет DOCX</button>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/print_pdf.js' %}"></script>
+{% endblock js %}

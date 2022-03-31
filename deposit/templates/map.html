@@ -2,9 +2,11 @@
 {% load static %}
 {% block title %}Карта Забайкальского края{% endblock title %}
 {% block content %}
-    <section class="map-section">
-        <div class="container">
-            <h1 class="heading">Районы Забайкальского края и их месторождения</h1>
-        </div>
-    </section>
+    <div id="mapid"></div>
 {% endblock content %}
+{% block scroll %}
+{% endblock scroll %}
+{% block js %}
+    <script src="{% static 'js/zk_districts.js' %}"></script>
+    <script src="{% static 'js/map.js' %}"></script>
+{% endblock js %}

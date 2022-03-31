@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Информация о недропользователе{% endblock title %}
 {% block content %}
     <section class="municipality_detail-section">
@@ -7,7 +8,7 @@
             <div class="row" style="margin-top: 50px; justify-content: center">
                 <div class="col-md-8">
                     <p>Краткая информация о населенном пункте</p>
-                    <table class="table table-hover">
+                    <table class="table">
                         <tbody>
                         <tr>
                             <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Наименование</th>
@@ -24,62 +25,75 @@
                         </tbody>
                     </table>
                     <p>Месторождения связанные с населенным пунктом</p>
-                    <table class="table table-bordered">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Название месторождения</th>
-                            <th scope="col">Район месторождения</th>
-                            <th scope="col">Название лицензии</th>
-                            <th scope="col">Направление от населенного пункта</th>
-                            <th scope="col">Расстояние</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for d in loc_dep %}
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                             <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ d.id_deposit.name }}</td>
-                                <td>{{ d.id_deposit.id_area.name }}</td>
-                                <td>{{ d.id_deposit.id_license.name }}</td>
-                                <td>{{ d.direction }}</td>
-                                <td>{{ d.distance }}</td>
+                                <th scope="col">#</th>
+                                <th scope="col">Месторождение</th>
+                                <th scope="col">Район месторождения</th>
+                                <th scope="col">Лицензия</th>
+                                <th scope="col">Направление</th>
+                                <th scope="col">Расстояние</th>
                             </tr>
+                            </thead>
+                            <tbody>
+                            {% for d in loc_dep %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ d.id_deposit__name }}</td>
+                                    <td>{{ d.id_deposit__id_area__name }}</td>
+                                    <td>{{ d.id_deposit__id_license__name }}</td>
+                                    <td>{{ d.direction }}</td>
+                                    <td>{{ d.distance }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="details">
+                        {% for d in loc_dep %}
+                            <details>
+                                <summary>{{ d.id_deposit__name }}</summary>
+                                <table class="table table-bordered">
+                                    <tbody>
+                                    <tr>
+                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Месторождение</th>
+                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_deposit__name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Район месторождения</th>
+                                        <td>{{ d.id_deposit__id_area__name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Лицензия</th>
+                                        <td>{{ d.id_deposit__id_license__name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Направление от населенного пункта</th>
+                                        <td>{{ d.direction }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Расстояние</th>
+                                        <td>{{ d.distance }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </details>
+                            <hr/>
                         {% endfor %}
-                        </tbody>
-                    </table>
-                    {% for d_l in loc_dep %}
-                        <details>
-                            <summary>{{ d_l.id_deposit.name }}</summary>
-                            <table class="table table-bordered">
-                                <tbody>
-                                <tr>
-                                    <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Название месторождения</th>
-                                    <td class="col-md-2 col-sm-3 col-xs-6">{{ d_l.id_deposit.name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Район месторождения</th>
-                                    <td>{{ d_l.id_deposit.id_area.name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Название лицензии</th>
-                                    <td>{{ d_l.id_deposit.id_license.name }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Направление от населенного пункта</th>
-                                    <td>{{ d_l.direction }}</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">Расстояние</th>
-                                    <td>{{ d_l.distance }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </details>
-                        <hr/>
-                    {% endfor %}
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="button" class="btn btn-primary print">Отчет PDF</button>
+                        <a href="{% url 'locality_doc' locality.pk%}">
+                            <button type="button" class="btn btn-primary print">Отчет DOCX</button>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 {% endblock content %}
+{% block js %}
+    <script src="{% static 'js/print_pdf.js' %}"></script>
+{% endblock js %}

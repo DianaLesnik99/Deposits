@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'deposit',
     'users',
     'crispy_forms',
-    'crispy_bootstrap5'
+    'crispy_bootstrap5',
+    'docxtpl'
 ]
 
 MIDDLEWARE = [
