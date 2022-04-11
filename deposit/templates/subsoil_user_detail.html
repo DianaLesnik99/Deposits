@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Информация о недропользователе{% endblock title %}
+{% block title %}Информация о недропользователе {{ subsoil_user.name }}{% endblock title %}
 {% block content %}
     <section class="subsoil_users_detail-section">
         <div class="container">
@@ -42,7 +42,7 @@
                         <table class="table table-bordered caption-top">
                             <caption>Информация о лицензиях</caption>
                             <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">#</th>
                                 <th cscope="col">Лицензия</th>
                                 <th scope="col">Месторождение</th>
@@ -88,102 +88,128 @@
                                     <td>{{ d.id_license.destination }}</td>
                                 </tr>
                             {% endfor %}
+                            <tr>
+                                <th scope="row">Итого</th>
+                                <td colspan="2"></td>
+                                    <td>{{ a_b_c1.abc1|default_if_none:"Отсутствуют" }}</td>
+                                    <td>{{ c2.c2|default_if_none:"Отсутствуют" }}</td>
+                                    <td>{{ off_balance.off_balance|default_if_none:"Отсутствуют" }}</td>
+                                    {% if a_b_c1.abc1 == None and c2.c2 == None and off_balance.off_balance == None %}
+                                        <td>Отсутствуют</td>
+                                    {% elif a_b_c1.abc1 == None and c2.c2 == None %}
+                                        <td>{{ off_balance.off_balance }}</td>
+                                    {% elif a_b_c1.abc1 == None and off_balance.off_balance == None %}
+                                        <td>{{ c2.c2 }}</td>
+                                    {% elif c2.c2 == None and off_balance.off_balance == None %}
+                                        <td>{{ a_b_c1.abc1 }}</td>
+                                    {% elif a_b_c1.abc1 == None %}
+                                        <td>{{ c2.c2|add:off_balance.off_balance }}</td>
+                                    {% elif c2.c2 == None %}
+                                        <td>{{ a_b_c1.abc1|add:off_balance.off_balance }}</td>
+                                    {% elif off_balance.off_balance == None %}
+                                        <td>{{ a_b_c1.abc1|add:c2.c2 }}</td>
+                                    {% else %}
+                                        <td>{{ a_b_c1.abc1|add:c2.c2|add:off_balance.off_balance }}</td>
+                                    {% endif %}
+                                <td colspan="4"></td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="details">
-                        {% for d in deposit %}
-                            <details>
-                                <summary>Информация о лицензии {{ d.id_license.name }} ({{ d.name }})</summary>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                    <tr>
-                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Лицензия</th>
-                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_license.name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Месторождение</th>
-                                        <td>{{ d.name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Запасы месторождения (A+B+C1), кг</th>
-                                        <td>{{ d.a_b_c1|default_if_none:"Отсутствуют" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Запасы месторождения (C2), кг</th>
-                                        <td>{{ d.c2|default_if_none:"Отсутствуют" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Забалансовые запасы месторождения, кг</th>
-                                        <td>{{ d.off_balance|default_if_none:"Отсутствуют" }}</td>
-                                    </tr>
-                                    {% if d.a_b_c1 == None and d.c2 == None and d.off_balance == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>Отсутствуют</td>
-                                        </tr>
-                                    {% elif d.a_b_c1 == None and d.c2 == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.off_balance }}</td>
-                                        </tr>
-                                    {% elif d.a_b_c1 == None and d.off_balance == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.c2 }}</td>
-                                        </tr>
-                                    {% elif d.c2 == None and d.off_balance == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.a_b_c1 }}</td>
-                                        </tr>
-                                    {% elif d.a_b_c1 == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.c2|add:d.off_balance }}</td>
-                                        </tr>
-                                    {% elif d.c2 == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.a_b_c1|add:d.off_balance }}</td>
-                                        </tr>
-                                    {% elif d.off_balance == None %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.a_b_c1|add:d.c2 }}</td>
-                                        </tr>
-                                    {% else %}
-                                        <tr>
-                                            <th scope="row">Суммарные запасы месторождения</th>
-                                            <td>{{ d.a_b_c1|add:d.c2|add:d.off_balance }}</td>
-                                        </tr>
-                                    {% endif %}
-                                    <tr>
-                                        <th scope="row">Дата начала срока действия лицензии</th>
-                                        <td>{{ d.id_license.start_date }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Дата окончания срока действия лицензии</th>
-                                        <td>{{ d.id_license.end_date }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Действие лицензии прекращено</th>
-                                        <td>{{ d.id_license.cancelled|yesno:"Да, Нет" }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Целевое назначение лицензии</th>
-                                        <td>{{ d.id_license.destination }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </details>
-                            <hr/>
-                        {% endfor %}
-                    </div>
+                    <p></p>
+                    {#                    <div class="details">#}
+                    {#                        {% for d in deposit %}#}
+                    {#                            <details>#}
+                    {#                                <summary>Информация о лицензии {{ d.id_license.name }} ({{ d.name }})</summary>#}
+                    {#                                <table class="table table-bordered">#}
+                    {#                                    <tbody>#}
+                    {#                                    <tr>#}
+                    {#                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Лицензия</th>#}
+                    {#                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_license.name }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Месторождение</th>#}
+                    {#                                        <td>{{ d.name }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Запасы месторождения (A+B+C1), кг</th>#}
+                    {#                                        <td>{{ d.a_b_c1|default_if_none:"Отсутствуют" }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Запасы месторождения (C2), кг</th>#}
+                    {#                                        <td>{{ d.c2|default_if_none:"Отсутствуют" }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Забалансовые запасы месторождения, кг</th>#}
+                    {#                                        <td>{{ d.off_balance|default_if_none:"Отсутствуют" }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    {% if d.a_b_c1 == None and d.c2 == None and d.off_balance == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>Отсутствуют</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.a_b_c1 == None and d.c2 == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.off_balance }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.a_b_c1 == None and d.off_balance == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.c2 }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.c2 == None and d.off_balance == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.a_b_c1 }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.a_b_c1 == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.c2|add:d.off_balance }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.c2 == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.a_b_c1|add:d.off_balance }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% elif d.off_balance == None %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.a_b_c1|add:d.c2 }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% else %}#}
+                    {#                                        <tr>#}
+                    {#                                            <th scope="row">Суммарные запасы месторождения</th>#}
+                    {#                                            <td>{{ d.a_b_c1|add:d.c2|add:d.off_balance }}</td>#}
+                    {#                                        </tr>#}
+                    {#                                    {% endif %}#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Дата начала срока действия лицензии</th>#}
+                    {#                                        <td>{{ d.id_license.start_date }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Дата окончания срока действия лицензии</th>#}
+                    {#                                        <td>{{ d.id_license.end_date }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Действие лицензии прекращено</th>#}
+                    {#                                        <td>{{ d.id_license.cancelled|yesno:"Да, Нет" }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Целевое назначение лицензии</th>#}
+                    {#                                        <td>{{ d.id_license.destination }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    </tbody>#}
+                    {#                                </table>#}
+                    {#                            </details>#}
+                    {#                            <hr/>#}
+                    {#                        {% endfor %}#}
+                    {#                    </div>#}
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-primary print">Отчет PDF</button>
-                        <a href="{% url 'subsoil_user_doc' subsoil_user.pk %}">
-                            <button type="button" class="btn btn-primary print">Отчет DOCX</button>
+                        <a href="{% url 'subsoil_user_doc' subsoil_user.pk %}" class="a_doc">
+                            <button type="button" class="btn btn-primary print button_doc">Отчет DOCX</button>
                         </a>
                     </div>
                 </div>

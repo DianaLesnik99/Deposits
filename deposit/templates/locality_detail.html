@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Информация о недропользователе{% endblock title %}
+{% block title %}Информация о населенном пункте {{ locality.name }}{% endblock title %}
 {% block content %}
     <section class="municipality_detail-section">
         <div class="container">
@@ -28,7 +28,7 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <thead>
-                            <tr>
+                            <tr class="text-center">
                                 <th scope="col">#</th>
                                 <th scope="col">Месторождение</th>
                                 <th scope="col">Район месторождения</th>
@@ -41,9 +41,13 @@
                             {% for d in loc_dep %}
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
-                                    <td>{{ d.id_deposit__name }}</td>
-                                    <td>{{ d.id_deposit__id_area__name }}</td>
-                                    <td>{{ d.id_deposit__id_license__name }}</td>
+                                    <td>
+                                        <a style="text-decoration: none" href="{% url 'subsoil_user_detail' d.id_deposit.id_license.id_subsoil_users.pk %}">
+                                            {{ d.id_deposit.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ d.id_deposit.id_area.name }}</td>
+                                    <td>{{ d.id_deposit.id_license.name }}</td>
                                     <td>{{ d.direction }}</td>
                                     <td>{{ d.distance }}</td>
                                 </tr>
@@ -51,42 +55,43 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="details">
-                        {% for d in loc_dep %}
-                            <details>
-                                <summary>{{ d.id_deposit__name }}</summary>
-                                <table class="table table-bordered">
-                                    <tbody>
-                                    <tr>
-                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Месторождение</th>
-                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_deposit__name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Район месторождения</th>
-                                        <td>{{ d.id_deposit__id_area__name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Лицензия</th>
-                                        <td>{{ d.id_deposit__id_license__name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Направление от населенного пункта</th>
-                                        <td>{{ d.direction }}</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Расстояние</th>
-                                        <td>{{ d.distance }}</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </details>
-                            <hr/>
-                        {% endfor %}
-                    </div>
+                    <p></p>
+                    {#                    <div class="details">#}
+                    {#                        {% for d in loc_dep %}#}
+                    {#                            <details>#}
+                    {#                                <summary>{{ d.id_deposit__name }}</summary>#}
+                    {#                                <table class="table table-bordered">#}
+                    {#                                    <tbody>#}
+                    {#                                    <tr>#}
+                    {#                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Месторождение</th>#}
+                    {#                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_deposit__name }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Район месторождения</th>#}
+                    {#                                        <td>{{ d.id_deposit__id_area__name }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Лицензия</th>#}
+                    {#                                        <td>{{ d.id_deposit__id_license__name }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Направление от населенного пункта</th>#}
+                    {#                                        <td>{{ d.direction }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    <tr>#}
+                    {#                                        <th scope="row">Расстояние</th>#}
+                    {#                                        <td>{{ d.distance }}</td>#}
+                    {#                                    </tr>#}
+                    {#                                    </tbody>#}
+                    {#                                </table>#}
+                    {#                            </details>#}
+                    {#                            <hr/>#}
+                    {#                        {% endfor %}#}
+                    {#                    </div>#}
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-primary print">Отчет PDF</button>
-                        <a href="{% url 'locality_doc' locality.pk%}">
-                            <button type="button" class="btn btn-primary print">Отчет DOCX</button>
+                        <a href="{% url 'locality_doc' locality.pk %}" class="a_doc">
+                            <button type="button" class="btn btn-primary print button_doc">Отчет DOCX</button>
                         </a>
                     </div>
                 </div>

@@ -230,7 +230,24 @@ a:hover {
 #mapid {
     height: 94vh;
 }
+
 /* Map Content */
+
+/* Area Detail Content */
+.a_doc {
+    text-decoration: none;
+}
+
+.button_doc {
+    display: block;
+    width: 100%;
+}
+
+.a_official_portal {
+    visibility: hidden;
+}
+
+/* Area Detail Content */
 
 /* Subsoil users Content */
 
@@ -315,10 +332,14 @@ footer {
 
     .table-responsive {
         overflow-x: visible;
-        font-size: 12px;
+        font-size: 11px;
     }
 
     @page {
         margin: 30px auto;
+    }
+
+    .a_official_portal {
+        visibility: visible;
     }
 }

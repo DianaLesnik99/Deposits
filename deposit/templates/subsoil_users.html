@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %}Недропользователи{% endblock title %}
 {% block content %}
     <section class="subsoil_users-section">
@@ -31,12 +32,15 @@
                                             <a class="page-link" href="#">{{ p }}</a>
                                         </li>
                                     {% else %}
-                                        <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                                        <li class="page-item"><a class="page-link"
+                                                                 href="?page={{ p }}">{{ p }}</a>
+                                        </li>
                                     {% endif %}
                                 {% endfor %}
                                 {% if page_obj.has_next %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
+                                        <a class="page-link"
+                                           href="?page={{ page_obj.next_page_number }}">&rsaquo;</a>
                                     </li>
                                     <li class="page-item">
                                         <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
@@ -46,8 +50,21 @@
                             </ul>
                         </nav>
                     {% endif %}
+                    <hr>
+                    <div class="details">
+                        <details>
+                            <summary>Диаграмма распределения запасов месторождений между недропользователями</summary>
+                            <div id="container">
+                                <canvas id="deposit_balance_chart" data-url="{% url 'deposit_balance_chart' %}"></canvas>
+                            </div>
+                        </details>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 {% endblock content %}
+{% block js %}
+    <script src="{% static 'js/chart.min.js'%}"></script>
+    <script src="{% static 'js/deposit_balance_chart.js' %}"></script>
+{% endblock js %}

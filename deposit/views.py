@@ -1,10 +1,9 @@
-import datetime
 import time
-
 from django.shortcuts import render
+from django.db.models import Sum, F
 from django.views.generic import DetailView, View, ListView
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse, JsonResponse
 from docxtpl import DocxTemplate
 from io import BytesIO
 
@@ -41,6 +40,12 @@ class AreaDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['deposit'] = Deposit.objects.filter(id_area=self.kwargs['pk'])
+        context['a_b_c1'] = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            abc1=Sum('a_b_c1'))
+        context['c2'] = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            c2=Sum('c2'))
+        context['off_balance'] = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            off_balance=Sum('off_balance'))
         return context
 
 
@@ -50,7 +55,7 @@ class SubsoilUsersView(ListView):
     queryset = SubsoilUsers.objects.all().order_by('name')
     context_object_name = 'subsoil_users'
     template_name = 'subsoil_users.html'
-    paginate_by = 20
+    paginate_by = 15
 
 
 def pagination_subsoil_user(request):
@@ -59,6 +64,24 @@ def pagination_subsoil_user(request):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     return render(request, 'subsoil_users.html', {'page_obj': page_obj})
+
+
+# Диаграмма распределения запасов между недропользователями
+def deposit_balance_chart(request):
+    labels = []
+    data = []
+    # queryset = Deposit.objects.aggregate(deposit_balance=Sum('a_b_c1')+Sum('c2'))
+    queryset = Deposit.objects.values('id_license__id_subsoil_users__name').annotate(
+        deposit_balance=Sum('a_b_c1') + Sum('c2') + Sum('off_balance')).order_by(
+        '-deposit_balance')[:5]
+    for dep in queryset:
+        labels.append(dep['id_license__id_subsoil_users__name'])
+        data.append(dep['deposit_balance'])
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
 
 
 # Информация о недропользователях
@@ -71,6 +94,12 @@ class SubsoilUserDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['deposit'] = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).order_by(
             '-id_license__start_date')
+        context['a_b_c1'] = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(
+            abc1=Sum('a_b_c1'))
+        context['c2'] = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(
+            c2=Sum('c2'))
+        context['off_balance'] = Deposit.objects.filter(
+            id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(off_balance=Sum('off_balance'))
         return context
 
 
@@ -93,13 +122,7 @@ class LocalityDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['loc_dep'] = LocalitiesDeposit.objects.filter(id_locality=self.kwargs.get('pk')).values(
-            'id_deposit__name',
-            'id_deposit__id_area__name',
-            'id_deposit__id_license__name',
-            'direction',
-            'distance',
-        )
+        context['loc_dep'] = LocalitiesDeposit.objects.filter(id_locality=self.kwargs.get('pk'))
         return context
 
 
@@ -109,55 +132,6 @@ class TestView(View):
         form = SubsoilUsersForm
         return render(request, '11.html', {'form': form})
 
-
-# Отчеты в PDF
-# class GeneratePDFLocality(View):
-#     def get(self, request, *args, **kwargs):
-#         template = get_template('pdf_report/locality_pdf.html')
-#         context = {'locality': Localities.objects.get(pk=self.kwargs['pk']),
-#                    'loc_dep': LocalitiesDeposit.objects.filter(id_locality=self.kwargs['pk']).values(
-#                        'id_deposit__name',
-#                        'id_deposit__id_area__name',
-#                        'id_deposit__id_license__name',
-#                        'direction',
-#                        'distance',
-#                    ),
-#                    'static': 'C:/Python/Django/Deposits/static/font/DejaVuSans.ttf',
-#                    'static_img': 'C:/Python/Django/Deposits/static/font/Carousel1.jpg',
-#                    }
-#
-#         html = template.render(context)
-#         pdf = render_to_pdf('pdf_report/locality_pdf.html', context)
-#         if pdf:
-#             response = HttpResponse(pdf, content_type='application/pdf')
-#             filename = "Report_Locality_" + str(context['locality'].id) + "_" + time.strftime("%Y.%m.%d") + ".pdf"
-#             content = "inline; filename='%s'" % (filename)
-#             download = request.GET.get("download")
-#             if download:
-#                 content = "attachment; filename='%s'" % (filename)
-#             response['Content-Disposition'] = content
-#             return response
-#         return HttpResponse("Not found")
-#
-#
-# class GeneratePDFSubsoilUser(View):
-#     def get(self, request, *args, **kwargs):
-#         template = get_template('pdf_report/subsoil_user_pdf.html')
-#         context = {'subsoil_user': SubsoilUsers.objects.get(pk=self.kwargs['pk']),
-#                    'deposit': Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs['pk']),
-#                    }
-#         html = template.render(context)
-#         pdf = render_to_pdf('pdf_report/subsoil_user_pdf.html', context)
-#         if pdf:
-#             response = HttpResponse(pdf, content_type='application/pdf')
-#             filename = "Report_" + str(context['subsoil_user'].id) + "_" + time.strftime("%Y.%m.%d") + ".pdf"
-#             content = "inline; filename='%s'" % (filename)
-#             download = request.GET.get("download")
-#             if download:
-#                 content = "attachment; filename='%s'" % (filename)
-#             response['Content-Disposition'] = content
-#             return response
-#         return HttpResponse("Not found")
 
 # Отчеты DOCX
 class GenerateDOCXLocality(View):
@@ -176,16 +150,11 @@ class GenerateDOCXLocality(View):
                        'distance')
                    }
         byte_io = BytesIO()
-        # tpl = DocxTemplate("static/doc_report/template.docx")
         tpl.render(context)
         tpl.save(byte_io)
         byte_io.seek(0)
         return FileResponse(byte_io, as_attachment=True,
-                            filename='Отчет_' + str(locality.name) + '_' + time.strftime("%Y.%m.%d %H.%M.%S") + '.docx')
-        # tpl.render(context)
-        # tpl.save('deposit/templates/doc_report/Отчет_' + str(locality.name) + '_' + time.strftime("%Y.%m.%d %H.%M.%S") + '.docx')
-        # return HttpResponseRedirect(
-        #     request.META.get('HTTP_REFERER', '/locality_detail/' + str(self.kwargs['pk']) + '/'))
+                            filename='Отчет_' + str(locality.name) + '_' + time.strftime("%d.%m.%Y %H.%M.%S") + '.docx')
 
 
 class GenerateDOCXSubsoilUser(View):
@@ -193,6 +162,12 @@ class GenerateDOCXSubsoilUser(View):
         asset_url = 'static/doc_report/report_subsoil_user.docx'
         tpl = DocxTemplate(asset_url)
         subsoil_user = SubsoilUsers.objects.get(pk=self.kwargs['pk'])
+        a_b_c1 = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(
+            abc1=Sum('a_b_c1'))
+        c2 = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(
+            c2=Sum('c2'))
+        off_balance = Deposit.objects.filter(id_license__id_subsoil_users=self.kwargs.get('pk')).aggregate(
+            off_balance=Sum('off_balance'))
         context = {'sub_name': subsoil_user.name,
                    'tin': subsoil_user.tin,
                    'iec': subsoil_user.iec,
@@ -208,17 +183,50 @@ class GenerateDOCXSubsoilUser(View):
                        'id_license__start_date',
                        'id_license__end_date',
                        'id_license__cancelled',
-                       'id_license__destination')
+                       'id_license__destination'),
+                   'a_b_c1': a_b_c1,
+                   'c2': c2,
+                   "off_balance": off_balance
                    }
         byte_io = BytesIO()
-        # tpl = DocxTemplate("deposit/templates/doc_report/template.docx")
         tpl.render(context)
         tpl.save(byte_io)
         byte_io.seek(0)
         return FileResponse(byte_io, as_attachment=True,
                             filename='Отчет_' + str(subsoil_user.name) + '_' + time.strftime(
-                                "%Y.%m.%d %H.%M.%S") + '.docx')
-        # tpl.render(context)
-        # tpl.save('deposit/templates/doc_report/Отчет_' + str(locality.name) + '_' + time.strftime("%Y.%m.%d %H.%M.%S") + '.docx')
-        # return HttpResponseRedirect(
-        #     request.META.get('HTTP_REFERER', '/locality_detail/' + str(self.kwargs['pk']) + '/'))
+                                "%d.%m.%Y %H.%M.%S") + '.docx')
+
+
+class GenerateDOCXArea(View):
+    def get(self, request, *args, **kwargs):
+        asset_url = 'static/doc_report/report_area.docx'
+        tpl = DocxTemplate(asset_url)
+        area = Area.objects.get(pk=self.kwargs['pk'])
+        a_b_c1 = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            abc1=Sum('a_b_c1'))
+        c2 = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            c2=Sum('c2'))
+        off_balance = Deposit.objects.filter(id_area=self.kwargs.get('pk')).aggregate(
+            off_balance=Sum('off_balance'))
+        context = {'area_name': area.name,
+                   'official_portal': area.official_portal,
+                   'deposit': Deposit.objects.filter(id_area=self.kwargs['pk']).values(
+                       'name',
+                       'id_license__id_subsoil_users__name',
+                       'id_license__name',
+                       'id_license__cancelled',
+                       'id_license__destination',
+                       'a_b_c1',
+                       'c2',
+                       'off_balance'),
+                   'a_b_c1': a_b_c1,
+                   'c2': c2,
+                   "off_balance": off_balance
+                   }
+        byte_io = BytesIO()
+        tpl.render(context)
+        tpl.save(byte_io)
+        byte_io.seek(0)
+        return FileResponse(byte_io, as_attachment=True,
+                            filename='Отчет_' + str(area.name) + '_район_' + time.strftime(
+                                "%d.%m.%Y %H.%M.%S") + '.docx')

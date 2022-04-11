@@ -1,12 +1,16 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block title %}Карта Забайкальского края{% endblock title %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/leaflet.css'%}"/>
+{% endblock css %}
 {% block content %}
     <div id="mapid"></div>
 {% endblock content %}
 {% block scroll %}
 {% endblock scroll %}
 {% block js %}
+    <script src="{% static 'js/leaflet.js'%}"></script>
     <script src="{% static 'js/zk_districts.js' %}"></script>
     <script src="{% static 'js/map.js' %}"></script>
 {% endblock js %}
