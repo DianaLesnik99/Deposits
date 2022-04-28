@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Диаграммы по запасам месторождений{% endblock title %}
+{% block content %}
+    <section class="subsoil_users-section">
+        <div class="container">
+            <h1 class="heading">Диаграммы по запасам месторождений</h1>
+            <div class="row" style="margin-top: 50px; justify-content: center">
+                <div class="col-md-8">
+                    <p>На данной странице представлены диаграммы по запасам месторождений. Для того чтобы посмотреть
+                        диаграмму, нажмите на ее название.</p>
+                    <hr>
+                    <div class="details">
+                        <details>
+                            <summary>Диаграмма распределения запасов месторождений между недропользователями</summary>
+                            <div id="container">
+                                <canvas id="deposit_balance_chart"
+                                        data-url="{% url 'deposit_balance_chart' %}"></canvas>
+                            </div>
+                        </details>
+                        <hr>
+                        <details>
+                            <summary>Диаграмма распределения запасов месторождений по районам</summary>
+                            <div id="container">
+                                <canvas id="area_balance_chart" data-url="{% url 'area_balance_chart' %}"></canvas>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
+{% block js %}
+    <script src="{% static 'js/chart.min.js' %}"></script>
+    <script src="{% static 'js/deposit_balance_chart.js' %}"></script>
+    <script src="{% static 'js/area_balance_chart.js' %}"></script>
+{% endblock js %}

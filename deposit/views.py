@@ -1,13 +1,13 @@
 import time
 from django.shortcuts import render
-from django.db.models import Sum, F
+from django.db.models import Sum, FloatField, ExpressionWrapper
+from django.db.models.functions import Coalesce
 from django.views.generic import DetailView, View, ListView
 from django.core.paginator import Paginator
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse
 from docxtpl import DocxTemplate
 from io import BytesIO
-
-from .forms import *
+from .models import *
 
 
 # Главная страница
@@ -70,12 +70,39 @@ def pagination_subsoil_user(request):
 def deposit_balance_chart(request):
     labels = []
     data = []
-    # queryset = Deposit.objects.aggregate(deposit_balance=Sum('a_b_c1')+Sum('c2'))
     queryset = Deposit.objects.values('id_license__id_subsoil_users__name').annotate(
-        deposit_balance=Sum('a_b_c1') + Sum('c2') + Sum('off_balance')).order_by(
-        '-deposit_balance')[:5]
+        deposit_balance=ExpressionWrapper(
+            Coalesce(Sum('a_b_c1'), 0) + Coalesce(Sum('c2'), 0) + Coalesce(Sum('off_balance'), 0),
+            output_field=FloatField())).order_by('-deposit_balance')[:5]
+    query = Deposit.objects.values('id_license__id_subsoil_users__name').annotate(
+        deposit_balance=ExpressionWrapper(
+            Coalesce(Sum('a_b_c1'), 0) + Coalesce(Sum('c2'), 0) + Coalesce(Sum('off_balance'), 0),
+            output_field=FloatField())).order_by('-deposit_balance')[5:]
+    total = 0
+    for dep in query:
+        if dep['deposit_balance'] is not None:
+            total = total + dep['deposit_balance']
     for dep in queryset:
         labels.append(dep['id_license__id_subsoil_users__name'])
+        data.append(dep['deposit_balance'])
+    data.append(total)
+    labels.append('Остальные')
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+
+def area_balance_chart(request):
+    labels = []
+    data = []
+    queryset = Deposit.objects.values('id_area__name').annotate(
+        deposit_balance=ExpressionWrapper(
+            Coalesce(Sum('a_b_c1'), 0) + Coalesce(Sum('c2'), 0) + Coalesce(Sum('off_balance'), 0),
+            output_field=FloatField())).order_by('-deposit_balance')
+    for dep in queryset:
+        labels.append(dep['id_area__name'])
         data.append(dep['deposit_balance'])
 
     return JsonResponse(data={
@@ -126,11 +153,10 @@ class LocalityDetailView(DetailView):
         return context
 
 
-class TestView(View):
+class DiagramView(View):
 
     def get(self, request, *args, **kwargs):
-        form = SubsoilUsersForm
-        return render(request, '11.html', {'form': form})
+        return render(request, 'diagram.html')
 
 
 # Отчеты DOCX
@@ -154,7 +180,7 @@ class GenerateDOCXLocality(View):
         tpl.save(byte_io)
         byte_io.seek(0)
         return FileResponse(byte_io, as_attachment=True,
-                            filename='Отчет_' + str(locality.name) + '_' + time.strftime("%d.%m.%Y %H.%M.%S") + '.docx')
+                            filename='Отчет ' + str(locality.name) + ' ' + time.strftime("%d.%m.%Y %H.%M.%S") + '.docx')
 
 
 class GenerateDOCXSubsoilUser(View):
@@ -193,7 +219,7 @@ class GenerateDOCXSubsoilUser(View):
         tpl.save(byte_io)
         byte_io.seek(0)
         return FileResponse(byte_io, as_attachment=True,
-                            filename='Отчет_' + str(subsoil_user.name) + '_' + time.strftime(
+                            filename='Отчет ' + str(subsoil_user.name) + ' ' + time.strftime(
                                 "%d.%m.%Y %H.%M.%S") + '.docx')
 
 
@@ -228,5 +254,5 @@ class GenerateDOCXArea(View):
         tpl.save(byte_io)
         byte_io.seek(0)
         return FileResponse(byte_io, as_attachment=True,
-                            filename='Отчет_' + str(area.name) + '_район_' + time.strftime(
+                            filename='Отчет ' + str(area.name) + ' район ' + time.strftime(
                                 "%d.%m.%Y %H.%M.%S") + '.docx')

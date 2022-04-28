@@ -50,21 +50,30 @@
                             </ul>
                         </nav>
                     {% endif %}
-                    <hr>
-                    <div class="details">
-                        <details>
-                            <summary>Диаграмма распределения запасов месторождений между недропользователями</summary>
-                            <div id="container">
-                                <canvas id="deposit_balance_chart" data-url="{% url 'deposit_balance_chart' %}"></canvas>
-                            </div>
-                        </details>
-                    </div>
+{#                    <hr>#}
+{#                    <div class="details">#}
+{#                        <details>#}
+{#                            <summary>Диаграмма распределения запасов месторождений между недропользователями</summary>#}
+{#                            <div id="container">#}
+{#                                <canvas id="deposit_balance_chart"#}
+{#                                        data-url="{% url 'deposit_balance_chart' %}"></canvas>#}
+{#                            </div>#}
+{#                        </details>#}
+{#                        <hr>#}
+{#                        <details>#}
+{#                            <summary>Диаграмма распределения запасов месторождений по районам</summary>#}
+{#                            <div id="container">#}
+{#                                <canvas id="area_balance_chart" data-url="{% url 'area_balance_chart' %}"></canvas>#}
+{#                            </div>#}
+{#                        </details>#}
+{#                    </div>#}
                 </div>
             </div>
         </div>
     </section>
 {% endblock content %}
 {% block js %}
-    <script src="{% static 'js/chart.min.js'%}"></script>
+    <script src="{% static 'js/chart.min.js' %}"></script>
     <script src="{% static 'js/deposit_balance_chart.js' %}"></script>
+    <script src="{% static 'js/area_balance_chart.js' %}"></script>
 {% endblock js %}

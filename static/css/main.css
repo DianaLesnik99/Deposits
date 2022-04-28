@@ -70,7 +70,7 @@ a:hover {
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
-    height: 94vh;
+    height: 92vh;
 }
 
 @media (max-width: 991px) {
@@ -326,7 +326,8 @@ footer {
     .details,
     .btn-primary,
     .GoTop,
-    .GoBottom {
+    .GoBottom,
+    footer {
         display: none;
     }
 
@@ -341,5 +342,8 @@ footer {
 
     .a_official_portal {
         visibility: visible;
+    }
+    a {
+        text-decoration: none;
     }
 }

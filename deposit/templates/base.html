@@ -35,30 +35,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'localities' %}">Населенные пункты</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'diagram' %}">Диаграммы</a>
+                    </li>
 {#                    <li class="nav-item">#}
 {#                        <a class="nav-link" href="{% url 'test' %}">Тестовый</a>#}
 {#                    </li>#}
                 </ul>
-{#                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">#}
-{#                    {% if not request.user.is_authenticated %}#}
-{#                        <li class="nav-item dropdown">#}
-{#                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"#}
-{#                               data-bs-toggle="dropdown" aria-expanded="false"><i class="fa-solid fa-user"></i></a>#}
-{#                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">#}
-{#                                <li><a class="dropdown-item" href="#">Регистрация</a></li>#}
-{#                                <li><a class="dropdown-item" href="#">Авторизация</a></li>#}
-{#                            </ul>#}
-{#                        </li>#}
-{#                    {% endif %}#}
-{#                    {% if request.user.is_authenticated %}#}
-{#                        <span class="navbar text">Здравствуйте,&nbsp;#}
-{#                        <a href="#">#}
-{#                            <span class="badge rounded-pill bg-danger">{{ request.user.username }}</span>#}
-{#                        </a>#}
-{#                        &nbsp;|&nbsp;#}
-{#                        <a href="{% url 'logout' %}" style="color: black; text-decoration: none;">Выйти</a></span>#}
-{#                    {% endif %}#}
-{#                </ul>#}
             </div>
         </div>
     </nav>
@@ -106,9 +89,12 @@
     {% endblock content %}
 </div>
 <!--Footer-->
-<!--<footer class="bg-dark" style="  flex-shrink: 0;">
-    <div class="container"><p class="m-0 text-center text-white">...</p></div>
-</footer>-->
+{% block footer %}
+    <footer class="bg-dark fixed-bottom" style="  flex-shrink: 0;">
+        <div class="container"><p class="m-0 text-center text-white">&copy;Забайкальский государственный университет
+            2022</p></div>
+    </footer>
+{% endblock footer %}
 {% block scroll %}
     <img src="{% static 'img/up.webp' %}" alt="Наверх" title="Наверх" class="GoTop">
     <img src="{% static 'img/down.webp' %}" alt="Вниз" title="Вниз" class="GoBottom">
@@ -116,7 +102,6 @@
 <!--JS-->
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="https://kit.fontawesome.com/9ed2d1fb88.js" crossorigin="anonymous"></script>
 <script src="{% static 'js/scroll.js' %}"></script>
 {% block js %}
 {% endblock js %}

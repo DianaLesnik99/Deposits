@@ -8,7 +8,7 @@
             <div class="row" style="margin-top: 50px; justify-content: center">
                 <div class="col-md-8">
                     {% if area.official_portal != '' %}
-                        <a target="_blank" href="{{ area.official_portal }}" style="text-decoration: none;"><p>
+                        <a target="_blank" href="{{ area.official_portal }}"><p>
                             Официальный портал Забайкальского края. {{ area.name }} район <span
                                 class="a_official_portal">{{ area.official_portal }}</span></p></a>
                     {% else %}
@@ -41,7 +41,10 @@
                                     <tr>
                                         <th scope="row">{{ forloop.counter }}</th>
                                         <td>{{ d.name }}</td>
-                                        <td>{{ d.id_license.id_subsoil_users.name }}</td>
+                                        <td>
+                                            <a href="{% url 'subsoil_user_detail' d.id_license.id_subsoil_users.pk %}">
+                                                {{ d.id_license.id_subsoil_users.name }}</a>
+                                        </td>
                                         <td>{{ d.id_license.name }}</td>
                                         <td>{{ d.id_license.cancelled|yesno:"Да, Нет" }}</td>
                                         <td>{{ d.id_license.destination }}</td>

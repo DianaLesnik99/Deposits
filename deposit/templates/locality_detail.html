@@ -42,11 +42,14 @@
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>
-                                        <a style="text-decoration: none" href="{% url 'subsoil_user_detail' d.id_deposit.id_license.id_subsoil_users.pk %}">
+                                        <a
+                                           href="{% url 'subsoil_user_detail' d.id_deposit.id_license.id_subsoil_users.pk %}">
                                             {{ d.id_deposit.name }}
                                         </a>
                                     </td>
-                                    <td>{{ d.id_deposit.id_area.name }}</td>
+                                    <td><a
+                                           href="{% url 'area_detail' d.id_deposit.id_area.pk %}">{{ d.id_deposit.id_area.name }}</a>
+                                    </td>
                                     <td>{{ d.id_deposit.id_license.name }}</td>
                                     <td>{{ d.direction }}</td>
                                     <td>{{ d.distance }}</td>
@@ -56,38 +59,6 @@
                         </table>
                     </div>
                     <p></p>
-                    {#                    <div class="details">#}
-                    {#                        {% for d in loc_dep %}#}
-                    {#                            <details>#}
-                    {#                                <summary>{{ d.id_deposit__name }}</summary>#}
-                    {#                                <table class="table table-bordered">#}
-                    {#                                    <tbody>#}
-                    {#                                    <tr>#}
-                    {#                                        <th class="col-md-2 col-sm-3 col-xs-6" scope="row">Месторождение</th>#}
-                    {#                                        <td class="col-md-2 col-sm-3 col-xs-6">{{ d.id_deposit__name }}</td>#}
-                    {#                                    </tr>#}
-                    {#                                    <tr>#}
-                    {#                                        <th scope="row">Район месторождения</th>#}
-                    {#                                        <td>{{ d.id_deposit__id_area__name }}</td>#}
-                    {#                                    </tr>#}
-                    {#                                    <tr>#}
-                    {#                                        <th scope="row">Лицензия</th>#}
-                    {#                                        <td>{{ d.id_deposit__id_license__name }}</td>#}
-                    {#                                    </tr>#}
-                    {#                                    <tr>#}
-                    {#                                        <th scope="row">Направление от населенного пункта</th>#}
-                    {#                                        <td>{{ d.direction }}</td>#}
-                    {#                                    </tr>#}
-                    {#                                    <tr>#}
-                    {#                                        <th scope="row">Расстояние</th>#}
-                    {#                                        <td>{{ d.distance }}</td>#}
-                    {#                                    </tr>#}
-                    {#                                    </tbody>#}
-                    {#                                </table>#}
-                    {#                            </details>#}
-                    {#                            <hr/>#}
-                    {#                        {% endfor %}#}
-                    {#                    </div>#}
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <button type="button" class="btn btn-primary print">Отчет PDF</button>
                         <a href="{% url 'locality_doc' locality.pk %}" class="a_doc">
