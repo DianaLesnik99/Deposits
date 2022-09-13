@@ -1,5 +1,4 @@
 $(function () {
-    const randomNum = () => Math.floor(Math.random() * (235 - 52 + 1) + 52);
     var $areaBalanceChart = $("#area_balance_chart");
     $.ajax({
         url: $areaBalanceChart.data("url"),
@@ -26,10 +25,33 @@ $(function () {
                     labels: data.labels
                 },
                 options: {
+                    maintainAspectRatio: false,
                     responsive: true,
+                    onHover: (event, chartElement) => {
+                        if (chartElement.length === 1) {
+                            event.native.target.style.cursor = 'pointer';
+                        }
+                        ;
+                        if (chartElement.length === 0) {
+                            event.native.target.style.cursor = 'default';
+                        }
+                        ;
+                    },
                     plugins: {
+                        labels: {
+                            // render: (context) => {
+                            //     console.log(context.value)
+                            //     return context.value
+                            // },
+                            // position: 'outside',
+                            // textMargin: 6
+                            render: 'none'
+                        },
                         legend: {
+                            onHover: handleHover,
+                            onLeave: handleLeave,
                             position: (window.screen.width > 1400) ? 'right' : 'bottom',
+                            // position: 'top',
                             display: true,
                             labels: {
                                 font: {
@@ -78,7 +100,7 @@ $(function () {
                                 },
                                 label: function (tooltipItems) {
                                     var label = myChart.data.labels[tooltipItems.dataIndex] + ' район';
-                                    var value = myChart.data.datasets[tooltipItems.datasetIndex].data[tooltipItems.dataIndex];
+                                    var value = myChart.data.datasets[tooltipItems.datasetIndex].data[tooltipItems.dataIndex] + ' кг';
                                     return label + ': ' + value;
                                 },
                             },
@@ -86,6 +108,20 @@ $(function () {
                     },
                 },
             });
+
+            function handleHover(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+                });
+                legend.chart.update();
+            };
+
+            function handleLeave(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+                });
+                legend.chart.update();
+            };
         }
     });
 });

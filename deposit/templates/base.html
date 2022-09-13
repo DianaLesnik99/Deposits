@@ -38,17 +38,18 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'diagram' %}">Диаграммы</a>
                     </li>
-{#                    <li class="nav-item">#}
-{#                        <a class="nav-link" href="{% url 'test' %}">Тестовый</a>#}
-{#                    </li>#}
+                    {#                    <li class="nav-item">#}
+                    {#                        <a class="nav-link" href="{% url 'test' %}">Тестовый</a>#}
+                    {#                    </li>#}
                 </ul>
             </div>
         </div>
     </nav>
     {% block content %}
         <div class="container-fluid main">
-            <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
-                 data-bs-interval="3000">
+        <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel"
+             data-bs-interval="3000">
+            <div class="carousel-inner">
                 <div class="carousel-inner">
                     <div class="carousel-item active background a">
                         <div class="carousel-caption">
@@ -87,23 +88,23 @@
             </div>
         </div>
     {% endblock content %}
-</div>
-<!--Footer-->
-{% block footer %}
-    <footer class="bg-dark fixed-bottom" style="  flex-shrink: 0;">
-        <div class="container"><p class="m-0 text-center text-white">&copy;Забайкальский государственный университет
-            2022</p></div>
-    </footer>
-{% endblock footer %}
-{% block scroll %}
-    <img src="{% static 'img/up.webp' %}" alt="Наверх" title="Наверх" class="GoTop">
-    <img src="{% static 'img/down.webp' %}" alt="Вниз" title="Вниз" class="GoBottom">
-{% endblock scroll %}
-<!--JS-->
-<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
-<script src="{% static 'js/bootstrap.min.js' %}"></script>
-<script src="{% static 'js/scroll.js' %}"></script>
-{% block js %}
-{% endblock js %}
+    </div>
+    <!--Footer-->
+    {% block footer %}
+        <footer class="bg-dark fixed-bottom" style="  flex-shrink: 0;">
+            <div class="container"><p class="m-0 text-center text-white">&copy;Забайкальский государственный университет
+                2022</p></div>
+        </footer>
+    {% endblock footer %}
+    {% block scroll %}
+        <img src="{% static 'img/up.webp' %}" alt="Наверх" title="Наверх" class="GoTop">
+        <img src="{% static 'img/down.webp' %}" alt="Вниз" title="Вниз" class="GoBottom">
+    {% endblock scroll %}
+    <!--JS-->
+    <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/scroll.js' %}"></script>
+    {% block js %}
+    {% endblock js %}
 </body>
 </html>

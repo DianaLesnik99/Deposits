@@ -3,8 +3,8 @@ $(function () {
     $.ajax({
         url: $depositBalanceChart.data("url"),
         success: function (data) {
-            const ctx = $depositBalanceChart[0].getContext("2d");
-            new Chart(ctx, {
+            var ctx = $depositBalanceChart[0].getContext("2d");
+            var myChart = new Chart(ctx, {
                 type: 'pie',
                 data: {
                     datasets: [{
@@ -14,15 +14,30 @@ $(function () {
                         ],
                         label: 'Запасы месторождений у недропользователя'
                     }],
-                    labels: data.labels
+                    labels: data.labels,
                 },
                 options: {
+                    maintainAspectRatio: false,
                     responsive: true,
+                    onHover: (event, chartElement) => {
+                        if(chartElement.length === 1) {
+                            event.native.target.style.cursor = 'pointer';
+                        };
+                        if (chartElement.length === 0) {
+                            event.native.target.style.cursor = 'default';
+                        };
+                    },
                     plugins: {
                         legend: {
+                            onHover: handleHover,
+                            onLeave: handleLeave,
                             position: (window.screen.width > 1400) ? 'right' : 'bottom',
+                            // align: 'start',
+                            ltr: true,
+                            // position: 'top',
                             display: true,
                             labels: {
+                                textAlign: 'left',
                                 font: {
                                     size: (window.screen.width > 1400) ? 9 : 7
                                 },
@@ -67,11 +82,29 @@ $(function () {
                                         rotation: 0
                                     };
                                 },
+                                label: function (tooltipItems) {
+                                    var label = myChart.data.labels[tooltipItems.dataIndex];
+                                    var value = myChart.data.datasets[tooltipItems.datasetIndex].data[tooltipItems.dataIndex] + ' кг';
+                                    return label + ': ' + value;
+                                },
                             },
                         },
                     },
                 },
             });
-        }
+            function handleHover(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = index === item.index || color.length === 9 ? color : color + '4D';
+                });
+                legend.chart.update();
+            };
+
+            function handleLeave(evt, item, legend) {
+                legend.chart.data.datasets[0].backgroundColor.forEach((color, index, colors) => {
+                    colors[index] = color.length === 9 ? color.slice(0, -2) : color;
+                });
+                legend.chart.update();
+            };
+        },
     });
 });

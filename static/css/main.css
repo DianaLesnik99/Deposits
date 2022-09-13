@@ -3,6 +3,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    font-size: 115%;
 }
 
 .main {
@@ -81,22 +82,22 @@ a:hover {
 
 .carousel .background.a {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(/static/img/Carousel1.jpg);
+    url(/static/img/Carousel5.jpg);
 }
 
 .carousel .background.b {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(/static/img/Carousel2.jpg);
+    url(/static/img/Carousel7.jpg);
 }
 
 .carousel .background.c {
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url(/static/img/Carousel3.jpg);
+    url(/static/img/Carousel2.jpg);
 }
 
 .carousel-fade .carousel-inner .item {
     opacity: 0;
-    transition: opacity 0.5s; /* The 0.5s describes the duration to make the opacity from 0 to 1 */
+    transition: opacity 0.5s;
 }
 
 .carousel-fade .carousel-inner .active {
@@ -178,6 +179,8 @@ a:hover {
 /* History Content */
 .heading {
     text-align: center;
+    font-size: 215%;
+    /*Нормальный размер*/
 }
 
 .toc-container {
@@ -301,6 +304,14 @@ a:hover {
 
 /* Municipality Content */
 
+/* Diagram Content */
+@media (min-width: 500px) {
+    #container_diagram {
+        height: 400px;
+    }
+}
+/* Diagram Content */
+
 /* Paginator */
 
 .pagination {
@@ -343,6 +354,7 @@ footer {
     .a_official_portal {
         visibility: visible;
     }
+
     a {
         text-decoration: none;
     }

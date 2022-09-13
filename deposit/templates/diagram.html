@@ -13,7 +13,11 @@
                     <div class="details">
                         <details>
                             <summary>Диаграмма распределения запасов месторождений между недропользователями</summary>
-                            <div id="container">
+                            <p class="mt-4 mb-4" style="font-size: 16px">Для получения информации о запасах наведите на
+                                сектор диаграммы</p>
+                            <h5 class="mt-4 mb-4" style="text-align: center">Распределение запасов месторождений между
+                                недропользователями</h5>
+                            <div id="container_diagram" style="padding-bottom: 20px">
                                 <canvas id="deposit_balance_chart"
                                         data-url="{% url 'deposit_balance_chart' %}"></canvas>
                             </div>
@@ -21,7 +25,11 @@
                         <hr>
                         <details>
                             <summary>Диаграмма распределения запасов месторождений по районам</summary>
-                            <div id="container">
+                            <p class="mt-4 mb-4" style="font-size: 16px">Для получения информации о запасах наведите на
+                                сектор диаграммы</p>
+                            <h5 class="mt-4 mb-5" style="text-align: center">Распределение запасов месторождений по
+                                районам</h5>
+                            <div id="container_diagram">
                                 <canvas id="area_balance_chart" data-url="{% url 'area_balance_chart' %}"></canvas>
                             </div>
                         </details>

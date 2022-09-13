@@ -16,6 +16,5 @@ urlpatterns = [
     path('localities/', LocalitiesView.as_view(), name='localities'),
     path('locality_detail/<int:pk>/', LocalityDetailView.as_view(), name='locality_detail'),
     path('locality_doc/<int:pk>/', GenerateDOCXLocality.as_view(), name='locality_doc'),
-    path('test/', TestView.as_view(), name='test'),
     path('diagram/', DiagramView.as_view(), name='diagram'),
 ]
